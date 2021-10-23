@@ -1,0 +1,11 @@
+import os
+
+DB_NAME = os.environ["DB_NAME"]
+DB_PORT = os.environ["DB_PORT"]
+DB_USERNAME = os.environ["DB_USERNAME"]
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+DB_HOSTNAME = os.environ["DB_HOSTNAME"]
+
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_NAME}'
