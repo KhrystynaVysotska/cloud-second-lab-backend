@@ -15,11 +15,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 
 # MySQL config
-ENV DB_PORT = 3306
-ENV DB_USERNAME = root
-ENV DB_PASSWORD = lab_password
-ENV DB_HOSTNAME = 10.62.224.3
-ENV DB_NAME = river_water_level
+ENV DB_PORT 3306
+ENV DB_USERNAME root
+ENV DB_PASSWORD lab_password
+ENV DB_HOSTNAME 10.62.224.3
+ENV DB_NAME river_water_level
 
 
 # Run the web service on container startup. Here we use the gunicorn
