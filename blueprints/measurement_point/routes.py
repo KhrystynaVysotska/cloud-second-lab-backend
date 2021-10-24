@@ -1,8 +1,13 @@
 from resources import db
-from sqlalchemy import and_
-from blueprints.measurement_point.model import MeasurementPoint
-from blueprints.measurement_point.schema import measurement_point_schema, measurement_points_schema
+from sqlalchemy import and_, func, desc
 from flask import Blueprint, request, jsonify
+from blueprints.measurement.model import Measurement
+from blueprints.float_sensor.model import FloatSensor
+from blueprints.measurement.schema import measurement_schema
+from blueprints.float_sensor.schema import float_sensor_schema
+from blueprints.measurement_point.model import MeasurementPoint
+from blueprints.measurement_point.schema import measurement_point_schema, measurement_points_schema, \
+    measurement_point_schema_exclude_float_sensors
 
 measurement_point_blueprint = Blueprint('measurement_point_blueprint', __name__, url_prefix="/measurement_point")
 
@@ -67,3 +72,27 @@ def delete_measurement_point(measurement_point_id):
     db.session.commit()
 
     return measurement_point_json_data
+
+
+@measurement_point_blueprint.route('/latest', methods=['GET'])
+def get_latest_measurement_data():
+    row_number_column = func.row_number().over(partition_by=Measurement.float_sensor_id,
+                                               order_by=desc(Measurement.timestamp)).label('row_number')
+
+    query = db.session.query(MeasurementPoint, FloatSensor, Measurement) \
+        .join(MeasurementPoint.float_sensors) \
+        .join(FloatSensor.measurements)
+
+    query = query.add_column(row_number_column)
+
+    result = query.from_self().filter(row_number_column == 1).all()
+
+    result_list = []
+    for measurement_point, float_sensor, measurement, row_number in result:
+        result_object = {
+            'measurement_point': measurement_point_schema_exclude_float_sensors.dump(measurement_point),
+            'float_sensor': float_sensor_schema.dump(float_sensor),
+            'measurement': measurement_schema.dump(measurement)}
+        result_list.append(result_object)
+
+    return jsonify(result_list)
