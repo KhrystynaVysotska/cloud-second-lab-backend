@@ -15,3 +15,4 @@ class MeasurementPointSchema(ma.Schema):
 
 measurement_point_schema = MeasurementPointSchema()
 measurement_points_schema = MeasurementPointSchema(many=True)
+measurement_point_schema_exclude_float_sensors = MeasurementPointSchema(exclude=("float_sensors",))
