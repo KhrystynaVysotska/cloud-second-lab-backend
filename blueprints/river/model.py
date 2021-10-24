@@ -2,7 +2,7 @@ from resources import db
 
 
 class River(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # auto_incremented by default
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), unique=True, nullable=False)
     image_url = db.Column(db.String(128))
     length_in_km = db.Column(db.Numeric, nullable=False)
