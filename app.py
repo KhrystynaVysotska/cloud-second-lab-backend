@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from resources import db, ma
 from blueprints.river.routes import river_blueprint
 from blueprints.locality.routes import locality_blueprint
@@ -7,6 +8,7 @@ from blueprints.float_sensor.routes import float_sensor_blueprint
 from blueprints.measurement_point.routes import measurement_point_blueprint
 
 app = Flask(__name__)
+CORS(app)
 
 app.register_blueprint(river_blueprint)
 app.register_blueprint(locality_blueprint)
