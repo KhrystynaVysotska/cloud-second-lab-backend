@@ -1,5 +1,7 @@
 import queue
 
+from sse.utils import format_sse
+
 
 class MessageAnnouncer:
 
@@ -9,6 +11,7 @@ class MessageAnnouncer:
     def listen(self):
         q = queue.Queue(maxsize=1000)
         self.listeners.append(q)
+        self.listeners[0].put_nowait(format_sse(data="You have successfully connected."))
         return q
 
     def announce(self, msg):
