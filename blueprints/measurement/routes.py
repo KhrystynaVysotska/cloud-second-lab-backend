@@ -94,8 +94,6 @@ def get_measurement_message():
     msg = format_sse(data=measurement_schema.dumps(new_measurement, default=str), event=float_sensor_id)
     announcer.announce(msg=msg)
 
-    print(msg)
-
     return measurement_schema.jsonify(new_measurement)
 
 
