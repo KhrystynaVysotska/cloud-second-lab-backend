@@ -77,6 +77,13 @@ def get_measurement_message():
     envelope = json.loads(request.data)
     payload = json.loads(base64.b64decode(envelope['message']['data']))
 
-    print(payload['id'], payload['timestamp'], payload['river_water_level'])
+    timestamp = payload['timestamp']
+    float_sensor_id = payload['id'].replace('device-', '')
+    water_level_in_metres = round(float(payload['river_water_level']), 2)
 
-    return 'OK', 200
+    new_measurement = Measurement(timestamp, water_level_in_metres, float_sensor_id)
+
+    db.session.add(new_measurement)
+    db.session.commit()
+
+    return measurement_schema.jsonify(new_measurement)
