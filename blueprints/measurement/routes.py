@@ -74,9 +74,9 @@ def get_measurement_message():
     if request.args.get('token', '') != PUBSUB_VERIFICATION_TOKEN:
         return 'Invalid request', 400
 
-    envelope = json.loads(request.data)
-    payload = base64.b64decode(envelope['message']['data']).decode('utf-8')
+    envelope = json.loads(request.data.decode('utf-8'))
+    payload = json.loads(base64.b64decode(envelope['message']['data']))
 
-    print(json.loads(payload))
+    print(payload.id, payload.timestamp, payload.river_water_level)
 
     return 'OK', 200
