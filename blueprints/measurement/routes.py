@@ -108,4 +108,5 @@ def listen():
 
     response = flask.Response(stream(), mimetype='text/event-stream')
     response.headers.add('Access-Control-Allow-Origin', '*')
+    print(response)
     return response
