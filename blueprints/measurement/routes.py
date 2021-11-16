@@ -1,13 +1,18 @@
 import json
 import base64
+import flask
 from resources import db
 from sqlalchemy import and_
 from flask import Blueprint, request, jsonify
 from blueprints.measurement.model import Measurement
 from blueprints.measurement.schema import measurement_schema, measurements_schema
 from settings import PUBSUB_VERIFICATION_TOKEN
+from sse.MessageAnnouncer import MessageAnnouncer
+from sse.utils import format_sse
 
 measurement_blueprint = Blueprint('measurement_blueprint', __name__, url_prefix="/measurement")
+
+announcer = MessageAnnouncer()
 
 
 @measurement_blueprint.route('/', methods=['POST'])
@@ -86,4 +91,18 @@ def get_measurement_message():
     db.session.add(new_measurement)
     db.session.commit()
 
+    msg = format_sse(data=measurement_schema.dumps(new_measurement), event=float_sensor_id)
+    announcer.announce(msg=msg)
+
     return measurement_schema.jsonify(new_measurement)
+
+
+@measurement_blueprint.route('/listen', methods=['GET'])
+def listen():
+    def stream():
+        messages = announcer.listen()
+        while True:
+            msg = messages.get()
+            yield msg
+
+    return flask.Response(stream(), mimetype='text/event-stream')
