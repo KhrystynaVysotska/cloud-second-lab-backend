@@ -106,4 +106,6 @@ def listen():
             print(msg)
             yield msg
 
-    return flask.Response(stream(), status=200, mimetype='text/event-stream')
+    response = flask.Response(stream(), mimetype='text/event-stream')
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
