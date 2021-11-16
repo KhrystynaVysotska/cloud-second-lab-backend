@@ -1,8 +1,11 @@
+import json
+import base64
 from resources import db
 from sqlalchemy import and_
 from flask import Blueprint, request, jsonify
 from blueprints.measurement.model import Measurement
 from blueprints.measurement.schema import measurement_schema, measurements_schema
+from settings import PUBSUB_VERIFICATION_TOKEN
 
 measurement_blueprint = Blueprint('measurement_blueprint', __name__, url_prefix="/measurement")
 
@@ -64,3 +67,16 @@ def delete_measurement(measurement_id):
     db.session.commit()
 
     return measurement_json_data
+
+
+@measurement_blueprint.route('/message', methods=['POST'])
+def get_measurement_message():
+    if request.args.get('token', '') != PUBSUB_VERIFICATION_TOKEN:
+        return 'Invalid request', 400
+
+    envelope = json.loads(request.data.decode('utf-8'))
+    payload = base64.b64decode(envelope['message']['data'])
+
+    print(payload)
+
+    return 'OK', 200
