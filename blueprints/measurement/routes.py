@@ -91,7 +91,7 @@ def get_measurement_message():
     db.session.add(new_measurement)
     db.session.commit()
 
-    msg = format_sse(data=measurement_schema.dumps(new_measurement), event=float_sensor_id)
+    msg = format_sse(data=measurement_schema.dumps(new_measurement, default=str), event=float_sensor_id)
     announcer.announce(msg=msg)
 
     return measurement_schema.jsonify(new_measurement)
