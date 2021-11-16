@@ -75,9 +75,8 @@ def get_measurement_message():
         return 'Invalid request', 400
 
     envelope = json.loads(request.data)
-    payload = base64.b64decode(envelope['message']['data'])
+    payload = base64.b64decode(envelope['message']['data']).decode('utf-8')
 
-    print(envelope)
     print(payload)
 
     return 'OK', 200
