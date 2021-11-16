@@ -9,7 +9,7 @@ class MessageAnnouncer:
         self.listeners = []
 
     def listen(self):
-        q = queue.Queue(maxsize=1000)
+        q = queue.Queue(maxsize=30)
         self.listeners.append(q)
         self.listeners[len(self.listeners) - 1].put_nowait(format_sse(data="You have successfully connected."))
         return q
