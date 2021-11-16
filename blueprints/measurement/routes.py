@@ -77,6 +77,6 @@ def get_measurement_message():
     envelope = json.loads(request.data)
     payload = base64.b64decode(envelope['message']['data']).decode('utf-8')
 
-    print(payload)
+    print(json.loads(payload))
 
     return 'OK', 200
