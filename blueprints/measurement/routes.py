@@ -1,6 +1,8 @@
 import json
 import base64
 import flask
+from flask_cors import cross_origin
+
 from resources import db
 from sqlalchemy import and_
 from flask import Blueprint, request, jsonify
@@ -98,6 +100,7 @@ def get_measurement_message():
 
 
 @measurement_blueprint.route('/listen', methods=['GET'])
+@cross_origin()
 def listen():
     def stream():
         messages = announcer.listen()
