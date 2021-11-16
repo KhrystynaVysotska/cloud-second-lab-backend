@@ -103,6 +103,7 @@ def listen():
         messages = announcer.listen()
         while True:
             msg = messages.get()
+            print(msg)
             yield msg
 
     return flask.Response(stream(), mimetype='text/event-stream')
