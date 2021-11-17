@@ -22,5 +22,4 @@ db.init_app(app)
 ma.init_app(app)
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run(threaded=True)
+    app.run(debug=True)
