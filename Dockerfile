@@ -6,4 +6,4 @@ COPY . ./
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 
-CMD exec gunicorn -b :$PORT app:app
+CMD exec gunicorn app:app
