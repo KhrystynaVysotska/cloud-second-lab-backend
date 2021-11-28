@@ -22,9 +22,9 @@ db.init_app(app)
 ma.init_app(app)
 
 
-@app.route("/")
-def hello_world():
-    return "<p>RIVER WATER LEVEL BACKEND</p>"
+@app.route("/health")
+def health_check():
+    return "RIVER WATER LEVEL APP BACKEND HEALTHY"
 
 
 if __name__ == "__main__":
