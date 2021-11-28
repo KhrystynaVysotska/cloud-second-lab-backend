@@ -22,7 +22,7 @@ db.init_app(app)
 ma.init_app(app)
 
 
-@app.route("/health")
+@app.route("/")
 def health_check():
     return "RIVER WATER LEVEL APP BACKEND HEALTHY"
 
